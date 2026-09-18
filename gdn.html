@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>guess the number</title>
+    </head>
+    <body>
+        <script src="script.js"></script>
+        <h1> Guess the number!</h1>
+        <input type="text" id="num" placeholder="Enter a number" style="border: 1px solid black; padding: 5px; border-radius: 5px;">
+        <br>
+        <button class="submit" onclick="submit()" style="border: 1px solid black; padding: 5px; border-radius: 5px;">submit</button>
+        <button class="reset" onclick="reset()" style="border: 1px solid black; padding: 5px; border-radius: 5px;">reset</button>
+        <p id="mytext" style="border: 1px solid black; padding: 10px; display: block; width: fit-content; border-radius: 5px;"></p>
+        <p id="counter" style="border: 1px solid black; padding: 10px; display: block; width: fit-content;border-radius: 5px;"></p>
+        <p id="history" style="border: 1px solid black; padding: 10px; display: block; width: fit-content;border-radius: 5px;"></p>
+        <p id="indicator"  style="border: 1px solid black; padding: 10px; display: block; width: fit-content;border-radius: 5px;"></p>
+        <script>
+            function showMessage(text) {
+            document.getElementById("mytext").innerHTML=text;
+            
+            }
+            function submit() {
+               
+                
+                
+                if (gameover) {
+                    showMessage("You already won! Click reset to play a new round.");
+                    document.body.style.backgroundColor="white";
+                    return;
+                }
+                if (counter <= 0) {
+                showMessage("You lost the number was " + secretNumber);
+                document.body.style.backgroundColor = "red";
+                document.getElementById("num").value = "";
+                 return;
+                
+                } 
+                let userGuess = Number(document.getElementById("num").value);
+                
+                if (document.getElementById("num").value==="" || isNaN(userGuess)) {
+                    showMessage("Please enter a valid number");
+                   document.body.style.backgroundColor="white";
+                    return;
+                }
+                
+                counter= counter - 1;
+                document.getElementById("counter").innerHTML=("You only have "+ counter + " guess");
+
+                let previousGuess = guesshistory[guesshistory.length - 1];
+                guesshistory.push(userGuess);
+                document.getElementById("history").innerHTML="Your guesses " + guesshistory;
+                if (previousGuess !== undefined) {
+                let previousdistance = Math.abs(previousGuess - secretNumber)
+                let currentdistance = Math.abs(userGuess - secretNumber)
+
+                if (currentdistance < previousdistance) {
+                    document.getElementById("indicator").innerHTML="Warmer!";
+                }
+                 else if (currentdistance > previousdistance) {
+                    document.getElementById("indicator").innerHTML="Colder!"
+                }
+            }
+            
+               
+               
+               
+            
+
+
+              if (userGuess === secretNumber) {
+                showMessage("Congratulations! You guessed the number!");
+                document.body.style.backgroundColor="green";
+                gameover = true;
+                return;
+               
+            }
+             else if (counter <= 0 ) {
+                 showMessage(" lost the number was " + secretNumber);
+                 document.body.style.backgroundColor="red"
+                 document.getElementById("num").value = "";
+                }
+                else if (userGuess < secretNumber) {
+                    showMessage("Too low! try again.");
+                    document.body.style.backgroundColor="lightblue";
+                }
+                
+                else if (userGuess > secretNumber) {
+                    showMessage("Too high! try again.");
+                    document.body.style.backgroundColor="lightcoral";
+                return counter;
+               }
+            
+            }
+        
+            function reset() {
+                document.getElementById("num").value = "";
+                document.getElementById("mytext").innerHTML = "";
+                document.body.style.backgroundColor = "white";
+                secretNumber = Math.floor(Math.random()*10)+1;
+                counter = 5
+                document.getElementById("counter").innerHTML = ""
+                gameover=false;
+                document.getElementById("history").innerHTML= ""
+                guesshistory=[]
+                document.getElementById("indicator").innerHTML=""
+                
+            }
+            let secretNumber = Math.floor(Math.random()*10)+1; // The number to guess
+            let counter = 5
+            let gameover = false; 
+            window.addEventListener("keydown", function(e){ 
+                if(e.key === 'Enter'){
+                    submit();
+        
+                }
+
+            })
+            window.addEventListener("keydown", function(e){
+                if(e.key === 'Shift'){
+                    reset();
+                }
+            })
+            let guesshistory=[];
+            
+        
+        
+
+</script>
+</body>
+</html>
